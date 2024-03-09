@@ -2,38 +2,47 @@ import 'package:flutter/material.dart';
 
 class RowBuilder extends StatelessWidget {
   final IndexedWidgetBuilder itemBuilder;
+  final int itemCount;
+  final bool reverse;
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
   final CrossAxisAlignment crossAxisAlignment;
   final TextDirection? textDirection;
   final VerticalDirection verticalDirection;
-  final int itemCount;
-  final bool reversed;
+  final bool growable;
 
   const RowBuilder({
     Key? key,
     required this.itemBuilder,
     required this.itemCount,
+    this.reverse = false,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.max,
-    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
     this.textDirection,
     this.verticalDirection = VerticalDirection.down,
-    required this.reversed,
+    this.growable,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: reversed == false
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
+      mainAxisSize: mainAxisSize,
+      verticalDirection: verticalDirection,
+      textDirection: textDirection,
+      children: reverse == false
           ? List.generate(
               itemCount,
               (index) => itemBuilder(context, index),
+              growable: growable,
             ).toList()
           : List.generate(
               itemCount,
               (index) => itemBuilder(context, index),
             ).reversed.toList(),
+      growable: growable,
     );
   }
 }
